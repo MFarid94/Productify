@@ -15,7 +15,7 @@ export const products = pgTable("products", {
    title: text("title").notNull(),
    description: text("description").notNull(),
    imageUrl: text("image_url").notNull(),
-   user_id: text("user_id").notNull().references(() => users.id, {onDelete: "cascade"}),
+   userId: text("userId").notNull().references(() => users.id, {onDelete: "cascade"}),
    createdAt: timestamp("created_at", {mode: "date"}).notNull().defaultNow(),
    updatedAt: timestamp("updated_at", {mode: "date"}).notNull().defaultNow(), 
 });
@@ -23,9 +23,9 @@ export const products = pgTable("products", {
 export const comments = pgTable("comments", {
     id: uuid("id").primaryKey().defaultRandom(),
     content: text("content").notNull(),
-    userId: text("user_id").notNull().references(() => users.id, {onDelete: "cascade"}),
-    productId: uuid("product_id").notNull().references(() => products.id, {onDelete: "cascade"}),
-    createdAt: timestamp("create_at", {mode: "date"}).notNull().defaultNow(),
+    userId: text("userId").notNull().references(() => users.id, {onDelete: "cascade"}),
+    productId: uuid("productId").notNull().references(() => products.id, {onDelete: "cascade"}),
+    createdAt: timestamp("created_at", {mode: "date"}).notNull().defaultNow(),
 });
 
 export const usersRelations = relations(users, ({many}) => ({
@@ -35,7 +35,7 @@ export const usersRelations = relations(users, ({many}) => ({
 
 export const productRelations = relations(products, ({one, many}) => ({
     comments: many(comments),
-    user: one(users, {fields: [products.user_id], references: [users.id]}),
+    user: one(users, {fields: [products.userId ], references: [users.id]}),
 }));
 
 export const commentsRelations = relations(comments, ({one}) => ({
