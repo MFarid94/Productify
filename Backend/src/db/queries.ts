@@ -2,6 +2,14 @@ import { db } from "./index";
 import { eq } from "drizzle-orm";
 import { users, comments, products, type NewUser, type NewComment, type NewProduct, } from "./schema";
 
+/* 
+Using Partial<NewUser> / Partial<NewProduct> allows callers to mutate identifiers and 
+system fields (id, timestamps, and likely userId for product), which can corrupt relational integrity.
+So we update by picking only the mutable fields from NewUser and NewProduct, and making them optional with Partial.
+*/
+type UpdateUserInput = Partial<Pick<NewUser, "email" | "name" | "imageUrl">>;
+type UpdateProductInput = Partial<Pick<NewProduct, "title" | "description" | "imageUrl">>;
+
 export const createUser = async (data: NewUser) => {
     const [user] = await db.insert(users).values(data).returning();
     return user;
@@ -11,16 +19,45 @@ export const getUserById = async (id: string) => {
     return db.query.users.findFirst({where: eq(users.id,id)});
 };
 
-export const updateUser = async (id: string, data: Partial<NewUser>) => {
+export const updateUser = async (id: string, data: UpdateUserInput) => {
+    const existingUser = await getUserById(id);
+    if(!existingUser){
+        throw new Error(`User with id ${id} not found`);
+    }
+
     const [user] = await db.update(users).set(data).where(eq(users.id, id)).returning();
     return user;
 };
 
+
+
 export const upsertUser = async (data: NewUser) => {
-    const existingUser = await getUserById(data.id);
+
+/*
+The current get-then-update/create flow is not atomic and can fail under concurrent requests.
+Use DB-native upsert in a single statement to ensure atomicity.
+*/
+
+/*     const existingUser = await getUserById(data.id);
     if (existingUser) return updateUser(data.id, data);
 
-    return createUser(data);
+    return createUser(data); 
+*/
+
+    const [user] = await db
+        .insert(users)
+        .values(data)
+        .onConflictDoUpdate({
+            target: users.id,
+            set: {
+                email: data.email,
+                name: data.name ?? null,
+                imageUrl: data.imageUrl ?? null,
+                updatedAt: new Date(),
+            },
+        })
+        .returning();
+    return user;
 };
 
 export const createProduct = async (data: NewProduct) => {
@@ -58,7 +95,7 @@ export const getProductById = async (id: string) => {
         });
     };
 
-    export const updateProduct = async (id: string, data: Partial<NewProduct>) => {
+    export const updateProduct = async (id: string, data: UpdateProductInput) => {
         const [product] = await db.update(products).set(data).where(eq(products.id, id)).returning();
         return product;
     };
