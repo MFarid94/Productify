@@ -10,6 +10,10 @@ router.get("/", productController.getAllProducts);
 // GET /api/products/my => Get products of current user (protected)
 router.get("/my", requireAuth, productController.getMyProducts);
 
+
+// GET /api/products/my/:id => Get single product by ID for current user (protected)
+router.get("/my/:id", requireAuth, productController.getMyProductById);
+
 // GET /api/products/:id => Get single product by ID (public)
 router.get("/:id", productController.getProductById);
 

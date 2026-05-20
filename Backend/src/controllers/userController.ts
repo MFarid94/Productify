@@ -9,16 +9,19 @@ export async function syncUser(req: Request, res: Response) {
         if(!userId) return res.status(401).json({ error: "Unauthorized" });
 
         const { email, name, imageUrl } = req.body;
+        const emailValue = typeof email === "string" ? email.trim() : "";
+        const nameValue = typeof name === "string" ? name.trim() : "";
+        const imageUrlValue = typeof imageUrl === "string" ? imageUrl.trim() : "";
 
-        if ( !email || !name || !imageUrl ) {
+        if ( !emailValue || !nameValue || !imageUrlValue ) {
             return res.status(400).json({ error: "Email, name, and imageUrl are required" });
         }
 
         const user = await queries.upsertUser({
             id: userId,
-            email,
-            name,
-            imageUrl
+            email: emailValue,
+            name: nameValue,
+            imageUrl: imageUrlValue
         });
         
         res.status(200).json(user);
