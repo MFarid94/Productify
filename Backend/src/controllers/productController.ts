@@ -44,10 +44,17 @@ export const getMyProducts = async (req: Request, res: Response) => {
 // Get single product by ID (protected, only if owned by user)
 export const getMyProductById = async (req: Request, res: Response) => {
   try {
+
+    const { userId } = getAuth(req);
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
     const id = req.params.id as string;
     const product = await queries.getProductById(id);
 
     if (!product) return res.status(404).json({ error: "Product not found" });
+    if (product.userId !== userId) {
+    return res.status(403).json({ error: "You can only view your own products" });
+    }
 
     res.status(200).json(product);
   } catch (error) {
