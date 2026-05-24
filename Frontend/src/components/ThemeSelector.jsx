@@ -51,10 +51,10 @@ function ThemeSelector() {
 
   return (
     <div className="dropdown dropdown-end">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-sm gap-1">
+        <button type="button" tabIndex={0} className="btn btn-ghost btn-sm gap-1">
             <PaletteIcon className="size-4" />
             <span className="hidden sm:inline">Theme</span>
-        </div>
+        </button>
 
         <ul tabIndex={0} className="dropdown-content menu bg-base-200 rounded-box z-50 w-56 p-2 shadow-xl max-h-96 overflow-y-auto flex-nowrap">
             {THEMES.map((t) => (
