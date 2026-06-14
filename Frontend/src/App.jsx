@@ -6,9 +6,17 @@ import ProductPage from "./pages/ProductPage";
 import ProfilePage from "./pages/ProfilePage";
 import CreateProductPage from "./pages/CreateProductPage";
 import EditProductPage from "./pages/EditProductPage";
+import { useQuery } from "@tanstack/react-query";
+import useAuthReq from "./hooks/useAuthReq";
+import useUserSync from "./hooks/useUserSync";
 
 
 function App() {
+  const { isSignedIn, isClerkLoaded } = useAuthReq();
+  useUserSync();
+
+  if(!isClerkLoaded) return null;
+
   return (
     <div className="min-h-screen bg-base-100">
       <Navbar />

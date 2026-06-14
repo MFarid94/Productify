@@ -10,7 +10,10 @@ import commentRoutes from "./routes/commentRoutes";
 
 const app = express();
 
-app.use(cors({origin: ENV.FRONTEND_URL}));
+// credentials: true allows cookies to be sent in cross-origin requests,
+// which is essential for maintaining user sessions and authentication states
+// when the frontend and backend are hosted on different domains or ports.
+app.use(cors({origin: ENV.FRONTEND_URL, credentials: true}));
 app.use(clerkMiddleware());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
