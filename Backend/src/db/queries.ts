@@ -54,7 +54,7 @@ Use DB-native upsert in a single statement to ensure atomicity.
                 name: data.name ?? null,
                 imageUrl: data.imageUrl ?? null,
                 updatedAt: new Date(),
-            },
+            },    
         })
         .returning();
     return user;
