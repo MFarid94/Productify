@@ -8,10 +8,15 @@ function useAuthReq() {
     useEffect(() => {
         const interceptor = api.interceptors.request.use(async (config) => {
             if (isSignedIn) {
+            try {
                 const token = await getToken();
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
+            } catch (error) {
+                console.error("Failed to fetch Clerk token:", error);
+                // Optionally: decide whether to proceed without token or reject the request
+             }
             }
             return config;
         });
