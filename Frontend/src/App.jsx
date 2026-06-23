@@ -24,9 +24,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/profile" element={isSignedIn ? <ProfilePage /> : <Navigate to={"/"} />} />
-          <Route path="/create" element={isSignedIn ? <CreateProductPage /> : <Navigate to={"/"} />} />
-          <Route path="/edit/:id" element={isSignedIn ? <EditProductPage /> : <Navigate to={"/"}  />} />
+          <Route path="/profile" element={isSignedIn ? <ProfilePage /> : <Navigate to={"/"} replace />} />
+          <Route path="/create" element={isSignedIn ? <CreateProductPage /> : <Navigate to={"/"} replace />} />
+          <Route path="/edit/:id" element={isSignedIn ? <EditProductPage /> : <Navigate to={"/"} replace />} />
         </Routes>
       </main>
     </div>

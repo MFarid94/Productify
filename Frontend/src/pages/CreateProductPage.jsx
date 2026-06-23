@@ -7,9 +7,11 @@ function CreateProductPage() {
   const navigate = useNavigate();
   const createProduct = useCreateProduct();
   const [formData, setFormData] = useState({ title: "", description: "", imageUrl: ""});
+  const [imageLoadFailed, setImageLoadFailed] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (createProduct.isPending) return;
     createProduct.mutate(formData, {
       onSuccess: () => {
         navigate("/");
@@ -52,19 +54,22 @@ function CreateProductPage() {
                 placeholder="Image URL"
                 className="grow"
                 value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                onChange={(e) => {
+                  setImageLoadFailed(false);
+                  setFormData({ ...formData, imageUrl: e.target.value });
+                }}
                 required
               />
             </label>
 
             {/* Image Preview */}
-            {formData.imageUrl && (
+            {formData.imageUrl && !imageLoadFailed && (
               <div className="rounded-box overflow-hidden">
                 <img
                   src={formData.imageUrl}
                   alt="Preview"
                   className="w-full h-40 object-cover"
-                  onError={(e) => {e.target.style.display = "none"}}
+                  onError={() => setImageLoadFailed(true)}
                 />
               </div>
             )}
