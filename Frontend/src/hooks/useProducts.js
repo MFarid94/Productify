@@ -41,7 +41,14 @@ export const useMyProducts = () => {
 };
 
 export const useUpdateProduct = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: updateProduct,
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ["product", variables.id] });
+            queryClient.invalidateQueries({ queryKey: ["myProducts"] });
+            queryClient.invalidateQueries({ queryKey: ["products"] });
+        }
     });
 };
