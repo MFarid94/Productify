@@ -8,6 +8,7 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
     description: product.description,
     imageUrl: product.imageUrl,
   });
+  const [imagePreviewFailed, setImagePreviewFailed] = useState(false);
 
   return (
     <div className="max-w-lg mx-auto">
@@ -48,18 +49,21 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
                 placeholder="Image URL"
                 className="grow"
                 value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                onChange={(e) => {
+                  setImagePreviewFailed(false);
+                  setFormData({ ...formData, imageUrl: e.target.value });
+                }}
                 required
               />
             </label>
 
-            {formData.imageUrl && (
+            {formData.imageUrl && !imagePreviewFailed && (
               <div className="rounded-box overflow-hidden">
                 <img
                   src={formData.imageUrl}
                   alt="Preview"
                   className="w-full h-40 object-cover"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
+                  onError={() => setImagePreviewFailed(true)}
                 />
               </div>
             )}
