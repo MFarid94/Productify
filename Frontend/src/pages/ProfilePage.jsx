@@ -5,7 +5,7 @@ import { PlusIcon, PackageIcon, EyeIcon, EditIcon, Trash2Icon } from "lucide-rea
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { data: products, isLoading } = useMyProducts();
+  const { data: products = [], isLoading, error } = useMyProducts();
   const deleteProduct = useDeleteProduct();
 
   const handleDelete = (id) => {
@@ -35,7 +35,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Products */}
-      {products?.length === 0 ? (
+      {products.length === 0 ? (
         <div className="card bg-base-300">
           <div className="card-body items-center text-center py-16">
             <PackageIcon className="size-16 text-base-content/20" />

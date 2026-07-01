@@ -37,6 +37,7 @@ function CommentsSection({ productId, comments = [], currentUserId }) {
             type="submit"
             className="btn btn-primary btn-sm btn-square"
             disabled={createComment.isPending || !content.trim()}
+            aria-label={createComment.isPending ? "Posting comment" : "Post comment"}
           >
             {createComment.isPending ? (
               <span className="loading loading-spinner loading-xs" />
@@ -89,6 +90,7 @@ function CommentsSection({ productId, comments = [], currentUserId }) {
                     }
                     className="btn btn-ghost btn-xs text-error"
                     disabled={deleteComment.isPending}
+                    aria-label="Delete comment"
                   >
                     {deleteComment.isPending ? (
                       <span className="loading loading-spinner loading-xs" />
