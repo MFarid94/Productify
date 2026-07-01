@@ -19,13 +19,17 @@ function Navbar() {
         <div className='flex gap-2 items-center'>
             <ThemeSelector />
             {isSignedIn ? ( 
-                <>
-                <Link to="/create" className='btn btn-primary btn-sm gap-1'>
-                    <PlusIcon className='size-4' />
-                    <span className='hidden sm:inline'>Create</span>
-                </Link>
-                <UserButton />
-                </>
+            <>
+              <Link to="/create" className="btn btn-primary btn-sm gap-1">
+                <PlusIcon className="size-4" />
+                <span className="hidden sm:inline">New Product</span>
+              </Link>
+              <Link to="/profile" className="btn btn-ghost btn-sm gap-1">
+                <UserIcon className="size-4" />
+                <span className="hidden sm:inline">Profile</span>
+              </Link>
+              <UserButton />
+            </>
             ) : (
                 <>
                 <SignInButton mode="modal">
